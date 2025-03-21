@@ -4,10 +4,6 @@ on:
     push:
         branches: 
         - 'dev'
-    pull_request:
-        types: [closed]
-        branches: 
-        - 'dev'
     workflow_dispatch:
         inputs:
             confirm_destroy:
