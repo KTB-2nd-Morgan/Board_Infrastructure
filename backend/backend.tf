@@ -54,6 +54,7 @@ resource "aws_s3_bucket_policy" "terraform_state_policy" {
   ]
 }
 POLICY
+    depends_on = [aws_s3_bucket_public_access_block.public_access]
 }
 
 resource "aws_dynamodb_table" "terraform_state_lock" {
