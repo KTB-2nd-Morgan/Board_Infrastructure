@@ -130,12 +130,12 @@ jobs:
                   # Dev 인프라 destroy
             - name: Terraform Init (Dev)
               if: ${{ github.event.inputs.target == 'DEV_INFRA' }}
-              working-directory: terraform_dev
+              working-directory: infra_dev
               run: terraform init
             
             - name: Terraform Destroy (Dev)
               if: ${{ github.event.inputs.target == 'DEV_INFRA' }}
-              working-directory: terraform_dev
+              working-directory: infra_dev
               run: terraform destroy -auto-approve
                   
             - name: Empty S3 Bucket
