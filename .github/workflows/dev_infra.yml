@@ -19,6 +19,10 @@ on:
                     - DEV_INFRA
                     - BACKEND
 
+concurrency:
+  group: dev-infra-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
     AWS_REGION: ap-northeast-2
     BUCKET: terraform-state-test-ktb-morgan
