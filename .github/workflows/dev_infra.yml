@@ -25,7 +25,7 @@ concurrency:
 
 env:
     AWS_REGION: ap-northeast-2
-    BUCKET: terraform-state-test-ktb-morgan
+    BUCKET: terraform-state-dev-morgan
     DYNAMODB_TABLE: terraform-state-lock-dev-morgan
 
 jobs:
