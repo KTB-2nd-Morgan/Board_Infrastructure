@@ -18,7 +18,6 @@ resource "aws_vpc" "project_vpc" {
   tags = {
     Name = "vpc_morgan_project"
   }
-  
 }
 
 # Public Subnet 생성
@@ -42,19 +41,10 @@ resource "aws_subnet" "nat_subnet_1" {
   }
 }
 
-resource "aws_subnet" "nat_subnet_2" {
-  vpc_id = aws_vpc.project_vpc.id
-  cidr_block = cidrsubnet(aws_vpc.project_vpc.cidr_block, 8, 30)
-  availability_zone = "ap-northeast-2a"
-  tags = {
-    Name = "subnet_nat_2"
-  }
-}
-
 # Private Subnet 생성
 resource "aws_subnet" "private_subnet_1" {
   vpc_id = aws_vpc.project_vpc.id
-  cidr_block = cidrsubnet(aws_vpc.project_vpc.cidr_block, 8, 40)
+  cidr_block = cidrsubnet(aws_vpc.project_vpc.cidr_block, 8, 30)
   availability_zone = "ap-northeast-2a"
   tags = {
     Name = "subnet_private_1"
@@ -127,11 +117,6 @@ resource "aws_route_table_association" "public_subnet_1_association" {
 
 resource "aws_route_table_association" "nat_subnet_1_association" {
   subnet_id = aws_subnet.nat_subnet_1.id
-  route_table_id = aws_route_table.nat_rt_1.id  
-}
-
-resource "aws_route_table_association" "nat_subnet_2_association" {
-  subnet_id = aws_subnet.nat_subnet_2.id
   route_table_id = aws_route_table.nat_rt_1.id  
 }
 
