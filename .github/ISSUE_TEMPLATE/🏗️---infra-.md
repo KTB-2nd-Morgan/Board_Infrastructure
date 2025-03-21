@@ -1,7 +1,7 @@
 ---
 name: "\U0001F3D7️  [infra]"
 about: 인프라 관련 이슈 템플릿 입니다.
-title: ''
+title: "\U0001F3D7️  [infra]"
 labels: "⚙ Setting"
 assignees: ''
 
