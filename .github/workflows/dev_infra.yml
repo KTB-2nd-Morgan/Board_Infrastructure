@@ -34,3 +34,26 @@ jobs:
                     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                     aws-region: ${{ env.AWS_REGION }}
+
+            - name: Terraform Init (Backend)
+              working-directory: backend
+              run: terraform init
+                  
+            - name: Terraform Import S3 Bucket
+              working-directory: backend
+              run: terraform import aws_s3_bucket.terraform_state terraform-state-test-ktb-morgan || echo "Bucket import failed."
+                  
+            - name: Terraform Import DynamoDB Table
+              working-directory: backend
+              run: terraform import aws_dynamodb_table.terraform_state_lock terraform-state-lock || echo "DynamoDB table import failed."
+            
+            - name: Terraform Plan (Backend)
+              working-directory: backend
+              id: backend_plan
+              run: |
+                terraform plan -detailed-exitcode || exit_code=$? && echo "::set-output name=exitcode::$exit_code"
+            
+            - name: Terraform Apply (Backend)
+              working-directory: backend
+              if: steps.backend_plan.outputs.exitcode == '2'
+              run: terraform apply -auto-approve
