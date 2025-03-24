@@ -31,10 +31,12 @@ variable "instance_type" {
 
 variable "ebs_type" {
   type = string
+  default = "gp2"
 }
 
 variable "instance_ebs_size" {
   type = number
+  default = 30
 }
 
 variable "key_name" {
@@ -44,10 +46,12 @@ variable "key_name" {
 
 variable "ami" {
   type = string
+  default = "ami-062cddb9d94dcf95d" #AL 2023
 }
 
 variable "openvpn_ami" {
   type = string
+  default = "ami-09a093fa2e3bfca5a" #OpenVPN
 }
 
 variable "env" {
