@@ -137,7 +137,7 @@ jobs:
       - name: Terraform Destroy (Dev)
         if: ${{ github.event.inputs.target == 'DEV_INFRA' }}
         working-directory: infra_dev
-        run: terraform destroy -auto-approve -var="db_password=${{ secrets.DB_PASSWORD }}"
+        run: terraform destroy -auto-approve -var="db_password=${{secrets.DB_PASSWORD}}"
 
       - name: Empty S3 Bucket
         if: ${{ github.event.inputs.target == 'BACKEND' }}
