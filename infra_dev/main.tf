@@ -17,6 +17,7 @@ module "vpc" {
   subnet_public_1  = var.subnet_public_1
   subnet_nat_1     = var.subnet_nat_1
   subnet_private_1 = var.subnet_private_1
+  subnet_private_2 = var.subnet_private_2
 }
 
 # Security Group
@@ -62,7 +63,7 @@ module "rds_mysql" {
   engine                         = var.engine
   db_password                    = var.db_password
   az                             = var.az
-  subnet_ids                     = [module.vpc.subnet_private_1.id]
+  subnet_ids                     = [module.vpc.subnet_private_1.id, module.vpc.subnet_private_2.id]
   network_vpc_id                 = module.vpc.vpc_id
   sg_allow_ingress_list_mysql    = var.sg_allow_ingress_list_mysql
   sg_allow_ingress_sg_list_mysql = [aws_security_group.sg_ec2.id]

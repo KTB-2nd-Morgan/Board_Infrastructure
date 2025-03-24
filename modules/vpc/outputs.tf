@@ -14,6 +14,10 @@ output "subnet_private_1" {
   value = aws_subnet.private_subnet_1
 }
 
+output "subnet_private_2" {
+  value = aws_subnet.private_subnet_2
+}
+
 output "nat_ip" {
   value = aws_eip.nat_eip_azone.public_ip
 }
