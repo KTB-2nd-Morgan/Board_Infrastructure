@@ -39,16 +39,18 @@ resource "aws_security_group" "sg_ec2" {
 }
 
 # EC2
-module "ec2_instances" {
-  source = "../modules/ec2_instance"
-  instance_type = var.instance_type
-  ebs_size = var.instance_ebs_size
-  key_name = var.key_name
-  vpc_id = module.vpc.vpc_id
-  instance_subnet_id_nat     = module.vpc.nat_subnet_1
-  instance_subnet_id_openvpn = module.vpc.public_subnet_1
-  sg_ec2_ids = [aws_security_group.sg_ec2.id]
-  env = var.env
+module "ec2_instance" {
+  source                      = "../modules/ec2"
+  instance_type               = var.instance_type
+  ebs_type                    = var.ebs_type
+  instance_ebs_size           = var.instance_ebs_size
+  key_name                    = var.key_name
+  sg_ec2_ids                  = [aws_security_group.sg_ec2.id]
+  instance_subnet_id_nat      = module.vpc.nat_subnet_1         # NAT 인스턴스용 서브넷
+  instance_subnet_id_openvpn  = module.vpc.public_subnet_1        # OpenVPN 인스턴스용 서브넷
+  ami                         = var.ami                         # NAT 인스턴스용 AMI (예: AL2023)
+  openvpn_ami                 = var.openvpn_ami                 # OpenVPN 인스턴스용 AMI
+  env                         = var.env
 
   depends_on = [ module.vpc ]
 }
