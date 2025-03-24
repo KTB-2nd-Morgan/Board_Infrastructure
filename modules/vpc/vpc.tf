@@ -1,8 +1,8 @@
 # VPC 생성
 resource "aws_vpc" "project_vpc" {
-  cidr_block = var.vpc_main_cidr
+  cidr_block           = var.vpc_main_cidr
   enable_dns_hostnames = true
-  instance_tenancy = "default"
+  instance_tenancy     = "default"
   tags = {
     Name = "vpc_morgan_project"
   }
@@ -10,39 +10,50 @@ resource "aws_vpc" "project_vpc" {
 
 # Public Subnet 생성
 resource "aws_subnet" "public_subnet_1" {
-  vpc_id = aws_vpc.project_vpc.id
-  cidr_block = var.subnet_public_1
+  vpc_id            = aws_vpc.project_vpc.id
+  cidr_block        = var.subnet_public_1
   availability_zone = "ap-northeast-2a"
-#   map_public_ip_on_launch = true
+  #   map_public_ip_on_launch = true
   tags = {
     Name = "subnet_public_1"
   }
 
-  depends_on = [ aws_vpc.project_vpc ]
+  depends_on = [aws_vpc.project_vpc]
 }
 
 # NAT Subnet 생성
 resource "aws_subnet" "nat_subnet_1" {
-  vpc_id = aws_vpc.project_vpc.id
-  cidr_block = var.subnet_nat_1
+  vpc_id            = aws_vpc.project_vpc.id
+  cidr_block        = var.subnet_nat_1
   availability_zone = "ap-northeast-2a"
   tags = {
     Name = "subnet_nat_1"
   }
 
-  depends_on = [ aws_vpc.project_vpc ]
+  depends_on = [aws_vpc.project_vpc]
 }
 
 # Private Subnet 생성
 resource "aws_subnet" "private_subnet_1" {
-  vpc_id = aws_vpc.project_vpc.id
-  cidr_block = var.subnet_private_1
+  vpc_id            = aws_vpc.project_vpc.id
+  cidr_block        = var.subnet_private_1
   availability_zone = "ap-northeast-2a"
   tags = {
     Name = "subnet_private_1"
   }
 
-  depends_on = [ aws_vpc.project_vpc ]
+  depends_on = [aws_vpc.project_vpc]
+}
+
+resource "aws_subnet" "private_subnet_2" {
+  vpc_id            = aws_vpc.project_vpc.id
+  cidr_block        = var.subnet_private_2
+  availability_zone = "ap-northeast-2c"
+  tags = {
+    Name = "subnet_private_2"
+  }
+
+  depends_on = [aws_vpc.project_vpc]
 }
 
 # 인터넷 게이트웨이 생성
@@ -57,18 +68,18 @@ resource "aws_internet_gateway" "project_igw" {
 resource "aws_eip" "nat_eip_azone" {
   domain = "vpc"
   tags = {
-        Name = "nat_eip_azone"
+    Name = "nat_eip_azone"
   }
 
-  depends_on = [ aws_internet_gateway.project_igw ]
+  depends_on = [aws_internet_gateway.project_igw]
 }
 
 # NAT 게이트웨이 생성
 resource "aws_nat_gateway" "project_nat_azone" {
   allocation_id = aws_eip.nat_eip_azone.id
-  subnet_id = aws_subnet.public_subnet_1.id
+  subnet_id     = aws_subnet.public_subnet_1.id
 
-  depends_on = [ aws_internet_gateway.project_igw, aws_eip.nat_eip_azone ]
+  depends_on = [aws_internet_gateway.project_igw, aws_eip.nat_eip_azone]
 
   tags = {
     Name = "nat_azone"
@@ -91,7 +102,7 @@ resource "aws_route_table" "public_rt" {
 resource "aws_route_table" "nat_rt_1" {
   vpc_id = aws_vpc.project_vpc.id
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.project_nat_azone.id
   }
 
@@ -100,7 +111,7 @@ resource "aws_route_table" "nat_rt_1" {
   }
 }
 
-resource "aws_route_table" "private_rt_1" {
+resource "aws_route_table" "private_rt" {
   vpc_id = aws_vpc.project_vpc.id
 
   tags = {
@@ -110,16 +121,22 @@ resource "aws_route_table" "private_rt_1" {
 
 # 라우팅 테이블 연결
 resource "aws_route_table_association" "public_subnet_1_association" {
-  subnet_id = aws_subnet.public_subnet_1.id
-  route_table_id = aws_route_table.public_rt.id  
+  subnet_id      = aws_subnet.public_subnet_1.id
+  route_table_id = aws_route_table.public_rt.id
 }
 
 resource "aws_route_table_association" "nat_subnet_1_association" {
-  subnet_id = aws_subnet.nat_subnet_1.id
-  route_table_id = aws_route_table.nat_rt_1.id  
+  subnet_id      = aws_subnet.nat_subnet_1.id
+  route_table_id = aws_route_table.nat_rt_1.id
 }
 
 resource "aws_route_table_association" "private_subnet_1_association" {
-  subnet_id = aws_subnet.private_subnet_1.id
-  route_table_id = aws_route_table.private_rt_1.id  
+  subnet_id      = aws_subnet.private_subnet_1.id
+  route_table_id = aws_route_table.private_rt.id
+}
+
+
+resource "aws_route_table_association" "private_subnet_2_association" {
+  subnet_id      = aws_subnet.private_subnet_2.id
+  route_table_id = aws_route_table.private_rt.id
 }

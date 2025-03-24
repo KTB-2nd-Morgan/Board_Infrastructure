@@ -11,7 +11,7 @@ variable "env" {
 
 variable "az" {
   type    = list(string)
-  default = ["ap-northeast-2a"]
+  default = ["ap-northeast-2a", "ap-northeast-2c"]
 
 }
 
@@ -34,6 +34,11 @@ variable "subnet_nat_1" {
 variable "subnet_private_1" {
   type    = string
   default = "192.168.30.0/24"
+}
+
+variable "subnet_private_2" {
+  type    = string
+  default = "192.168.130.0/24"
 }
 
 # EC2
