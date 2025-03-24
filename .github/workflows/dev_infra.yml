@@ -106,7 +106,7 @@ jobs:
       - name: Terraform Apply (Dev)
         working-directory: infra_dev
         if: steps.dev_plan.outputs.exitcode == '2'
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var="db_password=${{secrets.DB_PASSWORD}}"
 
   destroy_infra:
     name: Destroy Infrastructure
@@ -137,7 +137,7 @@ jobs:
       - name: Terraform Destroy (Dev)
         if: ${{ github.event.inputs.target == 'DEV_INFRA' }}
         working-directory: infra_dev
-        run: terraform destroy -auto-approve -var="db_password=${{secrets.DB_PASSWORD}}"
+        run: terraform destroy -auto-approve
 
       - name: Empty S3 Bucket
         if: ${{ github.event.inputs.target == 'BACKEND' }}
