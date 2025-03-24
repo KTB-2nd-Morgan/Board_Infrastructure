@@ -23,6 +23,38 @@ variable "subnet_private_1" {
   default = "192.168.30.0/24"
 }
 
+variable "instance_type" {
+  type = string
+  default = "t2.micro"
+  
+}
+
+variable "ebs_type" {
+  type = string
+}
+
+variable "instance_ebs_size" {
+  type = number
+}
+
+variable "key_name" {
+  type = string
+  default = "morgan-dev"
+}
+
+variable "ami" {
+  type = string
+}
+
+variable "openvpn_ami" {
+  type = string
+}
+
+variable "env" {
+  type = string
+  default = "dev"
+}
+
 # variable "server_port" {
 #   type = number
 #   default = 80
