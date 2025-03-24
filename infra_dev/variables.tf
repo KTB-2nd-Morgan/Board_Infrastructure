@@ -11,7 +11,7 @@ variable "env" {
 
 variable "az" {
   type    = list(string)
-  default = ["ap-northeast-2a", "ap-northeast-2c"]
+  default = ["ap-northeast-2a"]
 
 }
 
