@@ -15,11 +15,3 @@ variable "subnet_private_1" {
   type = string
 }
 
-# Security Group
-# variable "server_port" {
-#   type = number
-# }
-
-# variable "my_ip" {
-#   type = string
-# }
