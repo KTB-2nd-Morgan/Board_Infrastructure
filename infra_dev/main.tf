@@ -18,3 +18,37 @@ module "vpc" {
     subnet_nat_1 = var.subnet_nat_1
     subnet_private_1 = var.subnet_private_1
 }
+
+# Security Group
+resource "aws_security_group" "sg_ec2" {
+  vpc_id = module.vpc.vpc_id
+  name = "sg_ec2"
+  ingress = [
+    {
+      from_port          = 80
+      to_port            = 80
+      protocol           = "tcp"
+      cidr_blocks        = ["0.0.0.0/0"]
+      description        = ""
+      ipv6_cidr_blocks   = []
+      prefix_list_ids    = []
+      security_groups    = []
+      self               = false
+    }
+  ]
+}
+
+# EC2
+module "ec2_instances" {
+  source = "../modules/ec2_instance"
+  instance_type = var.instance_type
+  ebs_size = var.instance_ebs_size
+  key_name = var.key_name
+  vpc_id = module.vpc.vpc_id
+  instance_subnet_id_nat     = module.vpc.nat_subnet_1
+  instance_subnet_id_openvpn = module.vpc.public_subnet_1
+  sg_ec2_ids = [aws_security_group.sg_ec2.id]
+  env = var.env
+
+  depends_on = [ module.vpc ]
+}
