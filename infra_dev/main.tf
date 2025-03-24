@@ -49,7 +49,6 @@ module "ec2_instance" {
   instance_subnet_id_nat      = module.vpc.subnet_nat_1.id      # NAT 인스턴스용 서브넷
   instance_subnet_id_openvpn  = module.vpc.subnet_public_1.id   # OpenVPN 인스턴스용 서브넷
   ami                         = var.ami                         # NAT 인스턴스용 AMI (예: AL2023)
-  openvpn_ami                 = var.openvpn_ami                 # OpenVPN 인스턴스용 AMI
   env                         = var.env
 
   depends_on = [ module.vpc ]

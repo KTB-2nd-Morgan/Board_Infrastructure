@@ -49,11 +49,6 @@ variable "ami" {
   default = "ami-062cddb9d94dcf95d" #AL 2023
 }
 
-variable "openvpn_ami" {
-  type = string
-  default = "ami-09a093fa2e3bfca5a" #OpenVPN
-}
-
 variable "env" {
   type = string
   default = "dev"

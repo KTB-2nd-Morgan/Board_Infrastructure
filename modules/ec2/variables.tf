@@ -3,7 +3,8 @@ variable "ami" {
 }
 
 variable "openvpn_ami" {
-        type  = string
+  type = string
+  default = "ami-09a093fa2e3bfca5a" #OpenVPN
 }
 
 variable "instance_type" {
