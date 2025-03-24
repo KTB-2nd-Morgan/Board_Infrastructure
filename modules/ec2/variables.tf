@@ -18,6 +18,14 @@ variable "sg_ec2_ids" {
         type  = list
 }
 
+variable "ebs_type" {
+  type = string
+  default = "gp2"
+}
+variable "instance_ebs_size" {
+  type = number
+  default = 30
+}
 variable "instance_subnet_id_nat" {
   description = "NAT 인스턴스에 사용할 서브넷 ID"
   type        = string
