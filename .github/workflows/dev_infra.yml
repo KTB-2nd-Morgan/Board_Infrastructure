@@ -101,7 +101,7 @@ jobs:
         working-directory: infra_dev
         id: dev_plan
         run: |
-          terraform plan -detailed-exitcode || exit_code=$? && echo "::set-output name=exitcode::$exit_code"
+          terraform plan -var="db_password=${{secrets.DB_PASSWORD}}" -detailed-exitcode || exit_code=$? && echo "::set-output name=exitcode::$exit_code"
 
       - name: Terraform Apply (Dev)
         working-directory: infra_dev
