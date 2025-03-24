@@ -1,12 +1,9 @@
 variable "ami" {
         type  = string
-        default = "ami-062cddb9d94dcf95d" #AL 2023
 }
 
 variable "openvpn_ami" {
         type  = string
-        default = "ami-09a093fa2e3bfca5a" #OpenVPN
-  
 }
 
 variable "instance_type" {
@@ -20,11 +17,9 @@ variable "sg_ec2_ids" {
 
 variable "ebs_type" {
   type = string
-  default = "gp2"
 }
 variable "instance_ebs_size" {
   type = number
-  default = 30
 }
 variable "instance_subnet_id_nat" {
   description = "NAT 인스턴스에 사용할 서브넷 ID"
