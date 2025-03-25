@@ -103,6 +103,18 @@ module "rds_mysql" {
   depends_on = [module.vpc, aws_security_group.sg_ec2]
 }
 
+# ALB - logs
+resource "aws_s3_bucket" "alb_logs" {
+  bucket = var.aws_s3_lb_logs_name
+
+  acl = "log-delivery-write"
+
+  tags = {
+    Name = var.aws_s3_lb_logs_name
+    Env  = var.env
+  }
+}
+
 # ALB
 module "alb" {
   source              = "../modules/alb"
@@ -115,4 +127,6 @@ module "alb" {
   # ALB 타깃 그룹에 등록할 인스턴스 ID 리스트
   instance_ids      = [module.ec2_nat_instance.nat_instance_id]
   availability_zone = var.availability_zone # 타깃 그룹 어태치먼트에 사용되는 가용 영역
+
+  depends_on = [aws_s3_bucket.alb_logs, module.ec2_nat_instance]
 }
