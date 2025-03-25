@@ -103,7 +103,7 @@ jobs:
         run: |
           terraform plan \
           -var="db_password=${{secrets.DB_PASSWORD}}" \
-          -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}" \
+          -var="openvpn_password=${{ secrets.OPENVPN_PASSsWORD }}" \
           -detailed-exitcode || exit_code=$? && echo "::set-output name=exitcode::$exit_code"
 
       - name: Terraform Apply (Dev)
