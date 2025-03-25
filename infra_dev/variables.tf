@@ -68,8 +68,8 @@ variable "key_name" {
 }
 
 variable "openvpn_password" {
-  type      = string
-  sensitive = true
+  type = string
+  # sensitive = true
 }
 
 # RDS

@@ -43,8 +43,8 @@ ${local.openvpn_setup_script}
 EOF2
 chmod +x /tmp/openvpn_setup.exp
 /tmp/openvpn_setup.exp
-rm -f /tmp/openvpn_setup.exp
 EOF
+  # rm -f /tmp/openvpn_setup.exp
   tags = {
     Name = "project_ec2_openvpn_${var.env}"
   }

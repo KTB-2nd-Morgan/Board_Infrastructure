@@ -8,8 +8,8 @@ variable "openvpn_ami" {
 }
 
 variable "openvpn_password" {
-  type      = string
-  sensitive = true
+  type = string
+  #   sensitive = true
 }
 
 variable "instance_type" {
