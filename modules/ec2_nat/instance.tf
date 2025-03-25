@@ -11,7 +11,16 @@ resource "aws_instance" "ec2_nat" {
 
   vpc_security_group_ids = var.sg_ec2_ids
   key_name               = var.key_name
+
+  iam_instance_profile = var.iam_instance_profile
   tags = {
     Name = "project_ec2_${var.env}"
   }
+
+  user_data = <<EOF
+  #!/bin/bash
+
+  apt-get update -y
+  apt-get install -y openjdk-17-jdk
+  EOF
 }
