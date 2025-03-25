@@ -44,7 +44,7 @@ variable "auto_rollback_enabled" {
 variable "deployment_option" {
   description = "배포 옵션 (예: WITH_TRAFFIC_CONTROL)"
   type        = string
-  default     = "WITH_TRAFFIC_CONTROL"
+  default     = "WITHOUT_TRAFFIC_CONTROL"
 }
 
 variable "deployment_type" {
