@@ -58,8 +58,6 @@ resource "aws_lb_target_group_attachment" "target-group-attachment" {
   target_id        = var.instance_ids[count.index]
   port             = var.port
 
-  availability_zone = var.availability_zone
-
   depends_on = [aws_lb_target_group.target-group]
 }
 

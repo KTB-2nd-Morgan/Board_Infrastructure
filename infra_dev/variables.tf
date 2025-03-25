@@ -26,9 +26,19 @@ variable "subnet_public_1" {
   default = "192.168.10.0/24"
 }
 
+variable "subnet_public_2" {
+  type    = string
+  default = "192.168.110.0/24"
+}
+
 variable "subnet_nat_1" {
   type    = string
   default = "192.168.20.0/24"
+}
+
+variable "subnet_nat_2" {
+  type    = string
+  default = "192.168.120.0/24"
 }
 
 variable "subnet_private_1" {
