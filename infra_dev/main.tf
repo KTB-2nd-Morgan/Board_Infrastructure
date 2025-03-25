@@ -104,27 +104,27 @@ module "rds_mysql" {
 }
 
 # ALB - logs
-resource "aws_s3_bucket" "alb_logs" {
-  bucket = var.aws_s3_lb_logs_name
+# resource "aws_s3_bucket" "alb_logs" {
+#   bucket = var.aws_s3_lb_logs_name
 
-  tags = {
-    Name = var.aws_s3_lb_logs_name
-    Env  = var.env
-  }
-}
+#   tags = {
+#     Name = var.aws_s3_lb_logs_name
+#     Env  = var.env
+#   }
+# }
 
 # ALB
 module "alb" {
-  source              = "../modules/alb"
-  env                 = var.env
-  vpc_id              = module.vpc.vpc_id
-  subnet_ids          = [module.vpc.subnet_public_1.id, module.vpc.subnet_public_2.id]
-  aws_s3_lb_logs_name = var.aws_s3_lb_logs_name
-  port                = var.port
+  source     = "../modules/alb"
+  env        = var.env
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = [module.vpc.subnet_public_1.id, module.vpc.subnet_public_2.id]
+  # aws_s3_lb_logs_name = var.aws_s3_lb_logs_name
+  port = var.port
 
   # ALB 타깃 그룹에 등록할 인스턴스 ID 리스트
   instance_ids      = [module.ec2_nat_instance.nat_instance_id]
   availability_zone = var.availability_zone # 타깃 그룹 어태치먼트에 사용되는 가용 영역
 
-  depends_on = [aws_s3_bucket.alb_logs, module.ec2_nat_instance]
+  depends_on = [module.ec2_nat_instance]
 }
