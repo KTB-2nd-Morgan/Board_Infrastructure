@@ -107,8 +107,6 @@ module "rds_mysql" {
 resource "aws_s3_bucket" "alb_logs" {
   bucket = var.aws_s3_lb_logs_name
 
-  acl = "log-delivery-write"
-
   tags = {
     Name = var.aws_s3_lb_logs_name
     Env  = var.env
