@@ -18,9 +18,8 @@ resource "aws_instance" "ec2_nat" {
   }
 
   user_data = <<EOF
-  #!/bin/bash
-
-  apt-get update -y
-  apt-get install -y openjdk-17-jdk
-  EOF
+#!/bin/bash
+yum update -y
+yum install -y java-17-amazon-corretto-devel
+EOF
 }
