@@ -27,7 +27,7 @@ resource "aws_subnet" "public_subnet_2" {
   availability_zone = "ap-northeast-2c"
   #   map_public_ip_on_launch = true
   tags = {
-    Name = "subnet_public_1"
+    Name = "subnet_public_2"
   }
 
   depends_on = [aws_vpc.project_vpc]
@@ -119,7 +119,7 @@ resource "aws_nat_gateway" "project_nat_azone" {
 }
 
 resource "aws_nat_gateway" "project_nat_czone" {
-  allocation_id = aws_eip.nat_eip_azone.id
+  allocation_id = aws_eip.nat_eip_czone.id
   subnet_id     = aws_subnet.public_subnet_1.id
 
   depends_on = [aws_internet_gateway.project_igw, aws_eip.nat_eip_czone]
