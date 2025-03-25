@@ -102,3 +102,20 @@ variable "rds_instance_class" {
   type    = string
   default = "db.t3.micro"
 }
+
+# ALB
+variable "port" {
+  type    = number
+  default = 80
+}
+
+variable "aws_s3_lb_logs_name" {
+  type    = string
+  default = "morgan-dev-alb-logs"
+}
+
+variable "availability_zone" {
+  type    = string
+  default = "ap-northeast-2a"
+
+}
