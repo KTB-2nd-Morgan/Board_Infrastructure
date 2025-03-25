@@ -129,3 +129,24 @@ variable "availability_zone" {
   default = "ap-northeast-2a"
 
 }
+
+# CodeDeploy
+variable "server_application_name" {
+  type    = string
+  default = "morgan-dev"
+}
+
+variable "server_deployment_group_name" {
+  type    = string
+  default = "morgan-dev-deployment-group-backend"
+}
+
+variable "codedeploy_service_role_arn" {
+  type    = string
+  default = "arn:aws:iam::418295722497:role/CodeDeploy-morgan"
+}
+
+variable "codedeploy_ec2_role" {
+  type    = string
+  default = "CodeDeploy-EC2-Role"
+}

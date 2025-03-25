@@ -55,6 +55,12 @@ resource "aws_security_group" "sg_ec2" {
   ]
 }
 
+# IAM - EC2
+resource "aws_iam_instance_profile" "codedeploy_profile" {
+  name = "CodeDeploy-EC2-Profile"
+  role = var.codedeploy_ec2_role
+}
+
 # EC2 - NAT
 module "ec2_nat_instance" {
   source                 = "../modules/ec2_nat"
@@ -66,8 +72,8 @@ module "ec2_nat_instance" {
   instance_subnet_id_nat = module.vpc.subnet_nat_1.id # NAT 인스턴스용 서브넷
   ami                    = var.ami                    # NAT 인스턴스용 AMI (예: AL2023)
   env                    = var.env
-
-  depends_on = [module.vpc]
+  iam_instance_profile   = aws_iam_instance_profile.codedeploy_profile.name
+  depends_on             = [module.vpc]
 }
 
 # EC2 - OpenVPN
@@ -127,4 +133,26 @@ module "alb" {
   availability_zone = var.availability_zone # 타깃 그룹 어태치먼트에 사용되는 가용 영역
 
   depends_on = [module.ec2_nat_instance]
+}
+
+
+# ECR
+module "ecr" {
+  source = "../modules/ecr"
+  name   = "spring-app"
+  tags = {
+    Name = "spring-app-${var.env}"
+  }
+}
+
+# CodeDeploy
+module "codedeploy" {
+  source                        = "../modules/code_deploy"
+  application_name              = var.server_application_name
+  deployment_group_backend_name = var.server_deployment_group_name
+  service_role_arn              = var.codedeploy_service_role_arn
+  ec2_tag_key                   = "Name"
+  ec2_tag_value                 = module.ec2_nat_instance.nat_instance_name
+
+  depends_on = [module.ecr, module.alb]
 }
