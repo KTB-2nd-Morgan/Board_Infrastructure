@@ -38,7 +38,7 @@ resource "aws_instance" "ec2_openvpn" {
   user_data = <<EOF
 #!/bin/bash
 sleep 30
-cat << 'EOF2' > /tmp/openvpn_setup.exp
+cat << EOF2 > /tmp/openvpn_setup.exp
 ${local.openvpn_setup_script}
 EOF2
 chmod +x /tmp/openvpn_setup.exp
