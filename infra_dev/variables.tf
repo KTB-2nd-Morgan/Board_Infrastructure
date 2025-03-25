@@ -119,10 +119,10 @@ variable "port" {
   default = 80
 }
 
-variable "aws_s3_lb_logs_name" {
-  type    = string
-  default = "morgan-dev-alb-logs"
-}
+# variable "aws_s3_lb_logs_name" {
+#   type    = string
+#   default = "morgan-dev-alb-logs"
+# }
 
 variable "availability_zone" {
   type    = string

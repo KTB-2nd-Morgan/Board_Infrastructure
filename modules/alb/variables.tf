@@ -66,10 +66,6 @@ variable "idle_timeout" {
   default = 60
 }
 
-variable "aws_s3_lb_logs_name" {
-  type = string
-}
-
 # variable "ssl_policy" {
 #   type    = string
 #   default = "ELBSecurityPolicy-2016-08"

@@ -72,11 +72,11 @@ resource "aws_lb" "alb" {
 
   idle_timeout = var.idle_timeout
 
-  access_logs {
-    bucket  = var.aws_s3_lb_logs_name
-    prefix  = "alb-${var.env}"
-    enabled = true
-  }
+  #   access_logs {
+  #     bucket  = var.aws_s3_lb_logs_name
+  #     prefix  = "alb-${var.env}"
+  #     enabled = true
+  #   }
 
   tags = {
   Name = "alb-morgan-${var.env}" }
