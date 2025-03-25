@@ -1,19 +1,24 @@
 variable "ami" {
-        type  = string
+  type = string
 }
 
 variable "openvpn_ami" {
-  type = string
+  type    = string
   default = "ami-09a093fa2e3bfca5a" #OpenVPN
 }
 
+variable "openvpn_password" {
+  type      = string
+  sensitive = true
+}
+
 variable "instance_type" {
-        type  = string
-        default = "t2.micro" # 1c1m
+  type    = string
+  default = "t2.micro" # 1c1m
 }
 
 variable "sg_ec2_ids" {
-        type  = list
+  type = list(any)
 }
 
 variable "ebs_type" {
@@ -33,14 +38,14 @@ variable "instance_subnet_id_openvpn" {
 }
 
 variable "associate_public_ip_address" {
-        type = bool
-        default = false
+  type    = bool
+  default = false
 }
 
 variable "key_name" {
-        type = string
+  type = string
 }
 
 variable "env" {
-        type = string
+  type = string
 }
