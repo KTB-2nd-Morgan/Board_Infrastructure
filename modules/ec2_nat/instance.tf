@@ -22,10 +22,10 @@ resource "aws_instance" "ec2_nat" {
 yum update -y
 yum install -y java-17-amazon-corretto-devel
 sleep 10
-yum install -y docker
-systemctl start docker
-systemctl enable docker
-usermod -a -G docker ec2-user
+sudo yum install -y docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -a -G docker ec2-user
 sleep 10
 yum install ruby wget -y
 cd /home/ec2-user
