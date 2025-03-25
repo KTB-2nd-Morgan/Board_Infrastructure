@@ -34,3 +34,7 @@ variable "key_name" {
 variable "env" {
   type = string
 }
+
+variable "iam_instance_profile" {
+  type = string
+}

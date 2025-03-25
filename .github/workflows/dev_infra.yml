@@ -104,6 +104,7 @@ jobs:
           terraform plan \
           -var="db_password=${{secrets.DB_PASSWORD}}" \
           -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}" \
+          -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}" \
           -detailed-exitcode || exit_code=$? && echo "::set-output name=exitcode::$exit_code"
 
       - name: Terraform Apply (Dev)
@@ -112,7 +113,8 @@ jobs:
         run: |
           terraform apply -auto-approve \
           -var="db_password=${{ secrets.DB_PASSWORD }}" \
-          -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}"
+          -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}" \
+          -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}"
 
   destroy_infra:
     name: Destroy Infrastructure
@@ -146,7 +148,8 @@ jobs:
         run: |
           terraform destroy -auto-approve \
           -var="db_password=${{secrets.DB_PASSWORD}}" \
-          -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}"
+          -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}" \
+          -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}"
 
       - name: Empty S3 Bucket
         if: ${{ github.event.inputs.target == 'BACKEND' }}
