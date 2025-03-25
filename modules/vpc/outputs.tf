@@ -6,10 +6,16 @@ output "subnet_public_1" {
   value = aws_subnet.public_subnet_1
 }
 
+output "subnet_public_2" {
+  value = aws_subnet.public_subnet_2
+}
 output "subnet_nat_1" {
   value = aws_subnet.nat_subnet_1
 }
 
+output "subnet_nat_2" {
+  value = aws_subnet.nat_subnet_2
+}
 output "subnet_private_1" {
   value = aws_subnet.private_subnet_1
 }

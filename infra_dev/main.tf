@@ -15,7 +15,9 @@ module "vpc" {
   source           = "../modules/vpc"
   vpc_main_cidr    = var.vpc_main_cidr
   subnet_public_1  = var.subnet_public_1
+  subnet_public_2  = var.subnet_public_2
   subnet_nat_1     = var.subnet_nat_1
+  subnet_nat_2     = var.subnet_nat_2
   subnet_private_1 = var.subnet_private_1
   subnet_private_2 = var.subnet_private_2
 }
@@ -106,7 +108,7 @@ module "alb" {
   source              = "../modules/alb"
   env                 = var.env
   vpc_id              = module.vpc.vpc_id
-  subnet_ids          = [module.vpc.subnet_public_1.id]
+  subnet_ids          = [module.vpc.subnet_public_1.id, module.vpc.subnet_public_2.id]
   aws_s3_lb_logs_name = var.aws_s3_lb_logs_name
   port                = var.port
 
