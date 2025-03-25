@@ -21,5 +21,11 @@ resource "aws_instance" "ec2_nat" {
 #!/bin/bash
 yum update -y
 yum install -y java-17-amazon-corretto-devel
+sleep 10
+yum install ruby wget -y
+cd /home/ec2-user
+wget https://aws-codedeploy-ap-northeast-2.s3.amazonaws.com/latest/install
+chmod +x ./install
+sudo ./install auto
 EOF
 }
