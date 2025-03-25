@@ -67,6 +67,11 @@ variable "key_name" {
   default = "morgan-dev"
 }
 
+variable "openvpn_password" {
+  type      = string
+  sensitive = true
+}
+
 # RDS
 variable "dbname" {
   type    = string

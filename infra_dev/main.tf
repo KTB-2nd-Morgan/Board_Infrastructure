@@ -61,6 +61,7 @@ module "ec2_instance" {
   sg_ec2_ids                 = [aws_security_group.sg_ec2.id]
   instance_subnet_id_nat     = module.vpc.subnet_nat_1.id    # NAT 인스턴스용 서브넷
   instance_subnet_id_openvpn = module.vpc.subnet_public_1.id # OpenVPN 인스턴스용 서브넷
+  openvpn_password           = var.openvpn_password          # OpenVPN 인스턴스용 비밀번호
   ami                        = var.ami                       # NAT 인스턴스용 AMI (예: AL2023)
   env                        = var.env
 

@@ -106,7 +106,10 @@ jobs:
       - name: Terraform Apply (Dev)
         working-directory: infra_dev
         if: steps.dev_plan.outputs.exitcode == '2'
-        run: terraform apply -auto-approve -var="db_password=${{secrets.DB_PASSWORD}}"
+        run: |
+          terraform apply -auto-approve \
+          -var="db_password=${{ secrets.DB_PASSWORD }}" \
+          -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}"
 
   destroy_infra:
     name: Destroy Infrastructure
