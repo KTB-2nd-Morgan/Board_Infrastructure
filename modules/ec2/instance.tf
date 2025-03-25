@@ -22,7 +22,7 @@ resource "aws_instance" "ec2_nat" {
   }
 }
 
-resource "aws_instance" "ec2_opnevpn" {
+resource "aws_instance" "ec2_openvpn" {
   associate_public_ip_address = true
   ami                         = var.openvpn_ami
   subnet_id                   = var.instance_subnet_id_openvpn
