@@ -1,0 +1,43 @@
+variable "openvpn_ami" {
+  type    = string
+  default = "ami-09a093fa2e3bfca5a" #OpenVPN
+}
+
+variable "openvpn_password" {
+  type = string
+  #   sensitive = true
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t2.micro" # 1c1m
+}
+
+variable "sg_ec2_ids" {
+  type = list(any)
+}
+
+variable "ebs_type" {
+  type = string
+}
+variable "instance_ebs_size" {
+  type = number
+}
+
+variable "instance_subnet_id_openvpn" {
+  description = "OpenVPN 인스턴스에 사용할 서브넷 ID"
+  type        = string
+}
+
+variable "associate_public_ip_address" {
+  type    = bool
+  default = true
+}
+
+variable "key_name" {
+  type = string
+}
+
+variable "env" {
+  type = string
+}

@@ -53,18 +53,31 @@ resource "aws_security_group" "sg_ec2" {
   ]
 }
 
-# EC2
-module "ec2_instance" {
-  source                     = "../modules/ec2"
+# EC2 - NAT
+module "ec2_nat_instance" {
+  source                 = "../modules/ec2_nat"
+  instance_type          = var.instance_type
+  ebs_type               = var.ebs_type
+  instance_ebs_size      = var.instance_ebs_size
+  key_name               = var.key_name
+  sg_ec2_ids             = [aws_security_group.sg_ec2.id]
+  instance_subnet_id_nat = module.vpc.subnet_nat_1.id # NAT 인스턴스용 서브넷
+  ami                    = var.ami                    # NAT 인스턴스용 AMI (예: AL2023)
+  env                    = var.env
+
+  depends_on = [module.vpc]
+}
+
+# EC2 - OpenVPN
+module "openvpn_instance" {
+  source                     = "../modules/ec2_openvpn"
   instance_type              = var.instance_type
   ebs_type                   = var.ebs_type
   instance_ebs_size          = var.instance_ebs_size
   key_name                   = var.key_name
   sg_ec2_ids                 = [aws_security_group.sg_ec2.id]
-  instance_subnet_id_nat     = module.vpc.subnet_nat_1.id    # NAT 인스턴스용 서브넷
   instance_subnet_id_openvpn = module.vpc.subnet_public_1.id # OpenVPN 인스턴스용 서브넷
   openvpn_password           = var.openvpn_password          # OpenVPN 인스턴스용 비밀번호
-  ami                        = var.ami                       # NAT 인스턴스용 AMI (예: AL2023)
   env                        = var.env
 
   depends_on = [module.vpc]
@@ -86,4 +99,18 @@ module "rds_mysql" {
   rds_instance_class             = var.rds_instance_class
 
   depends_on = [module.vpc, aws_security_group.sg_ec2]
+}
+
+# ALB
+module "alb" {
+  source              = "../modules/alb"
+  env                 = var.env
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = [module.vpc.subnet_public_1.id]
+  aws_s3_lb_logs_name = var.aws_s3_lb_logs_name
+  port                = var.port
+
+  # ALB 타깃 그룹에 등록할 인스턴스 ID 리스트
+  instance_ids      = [module.ec2_nat_instance.nat_instance_id]
+  availability_zone = var.availability_zone # 타깃 그룹 어태치먼트에 사용되는 가용 영역
 }

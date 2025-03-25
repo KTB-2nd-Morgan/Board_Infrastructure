@@ -2,16 +2,6 @@ variable "ami" {
   type = string
 }
 
-variable "openvpn_ami" {
-  type    = string
-  default = "ami-09a093fa2e3bfca5a" #OpenVPN
-}
-
-variable "openvpn_password" {
-  type = string
-  #   sensitive = true
-}
-
 variable "instance_type" {
   type    = string
   default = "t2.micro" # 1c1m
@@ -29,11 +19,6 @@ variable "instance_ebs_size" {
 }
 variable "instance_subnet_id_nat" {
   description = "NAT 인스턴스에 사용할 서브넷 ID"
-  type        = string
-}
-
-variable "instance_subnet_id_openvpn" {
-  description = "OpenVPN 인스턴스에 사용할 서브넷 ID"
   type        = string
 }
 
