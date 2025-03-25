@@ -43,6 +43,7 @@ ${local.openvpn_setup_script}
 EOF2
 chmod +x /tmp/openvpn_setup.exp
 /tmp/openvpn_setup.exp
+sleep 10
 sudo /usr/local/openvpn_as/scripts/sacli --user openvpn --new_pass "${var.openvpn_password}" SetLocalPassword
 EOF
   # rm -f /tmp/openvpn_setup.exp
