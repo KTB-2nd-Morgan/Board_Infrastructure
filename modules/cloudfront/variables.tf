@@ -1,5 +1,5 @@
-variable "origin_bucket_domain_name" {
-  description = "S3 origin bucket domain name"
+variable "frontend_bucket_name" {
+  description = "S3 origin bucket name"
   type        = string
 }
 
@@ -21,4 +21,9 @@ variable "default_root_object" {
 
 variable "env" {
   type = string
+}
+
+variable "aws_region" {
+  type    = string
+  default = "ap-northeast-2"
 }

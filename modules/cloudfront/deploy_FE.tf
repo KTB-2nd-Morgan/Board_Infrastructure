@@ -26,7 +26,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   aliases = ["www.morgan.o-r.kr"]
 
   origin {
-    domain_name = var.origin_bucket_domain_name
+    domain_name = "${var.frontend_bucket_name}.s3.${var.aws_region}.amazonaws.com"
     origin_id   = "s3-frontend-${var.env}"
 
     s3_origin_config {
