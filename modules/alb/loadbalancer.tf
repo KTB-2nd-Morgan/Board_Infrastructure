@@ -61,6 +61,7 @@ resource "aws_lb_target_group_attachment" "target-group-attachment" {
   depends_on = [aws_lb_target_group.target-group]
 }
 
+# Application Load Balancer
 resource "aws_lb" "alb" {
   name               = "project-dev-alb"
   internal           = var.internal
@@ -81,20 +82,27 @@ resource "aws_lb" "alb" {
   tags = {
   Name = "alb-morgan-${var.env}" }
 }
+data "aws_acm_certificate" "cert" {
+  domain      = "*.morgan.o-r.kr"
+  statuses    = ["ISSUED"]
+  most_recent = true
+  types       = ["AMAZON_ISSUED"]
+}
 
 # HTTPS Listener (SSL termination)
-# resource "aws_lb_listener" "https_listener" {
-#   load_balancer_arn = aws_lb.alb.arn
-#   port              = "443"
-#   protocol          = "HTTPS"
-#   ssl_policy        = var.ssl_policy         # 예: "ELBSecurityPolicy-2016-08"
-#   certificate_arn   = var.certificate_arn    # ACM 인증서 ARN
+resource "aws_lb_listener" "https_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
 
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.target-group.arn
-#   }
-# }
+  certificate_arn = data.aws_acm_certificate.cert.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target-group.arn
+  }
+}
 
 # HTTP Listener (리디렉션)
 resource "aws_lb_listener" "http_listener" {
@@ -103,17 +111,13 @@ resource "aws_lb_listener" "http_listener" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target-group.arn
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
-  #   default_action {
-  #     type = "redirect"
-  #     redirect {
-  #       port        = "443"
-  #       protocol    = "HTTPS"
-  #       status_code = "HTTP_301"
-  #     }
-  #   }
 }
 
 resource "aws_lb_listener_rule" "http_listener_rule" {
@@ -131,3 +135,4 @@ resource "aws_lb_listener_rule" "http_listener_rule" {
     }
   }
 }
+
