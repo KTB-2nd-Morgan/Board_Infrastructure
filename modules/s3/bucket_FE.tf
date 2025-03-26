@@ -1,13 +1,19 @@
 resource "aws_s3_bucket" "frontend" {
   bucket = var.frontend_bucket_name
-
-  website {
-    index_document = var.default_root_object
-    error_document = var.default_root_object
-  }
-
   tags = {
     Name = "frontend-${var.env}"
+  }
+}
+
+resource "aws_s3_bucket_website_configuration" "frontend_website" {
+  bucket = aws_s3_bucket.frontend.id
+
+  index_document {
+    suffix = var.default_root_object
+  }
+
+  error_document {
+    key = var.default_root_object
   }
 }
 
