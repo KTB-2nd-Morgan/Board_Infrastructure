@@ -73,6 +73,12 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 resource "aws_s3_bucket_policy" "frontend_policy" {
   bucket = var.frontend_bucket_id
 
+  depends_on = [
+    aws_cloudfront_origin_access_identity.oai,
+    aws_cloudfront_distribution.frontend_distribution,
+    data.aws_caller_identity.current
+  ]
+
   policy = jsonencode({
     Version = "2012-10-17",
     Statement : [
