@@ -4,6 +4,15 @@ locals {
   })
 }
 
+#EIP 생성
+resource "aws_eip" "openvpn_eip" {
+  vpc = true
+  tags = {
+    Name = "project_openvpn_eip_${var.env}"
+  }
+}
+
+# OpenVPN 인스턴스 생성
 resource "aws_instance" "ec2_openvpn" {
   associate_public_ip_address = var.associate_public_ip_address
   ami                         = var.openvpn_ami
@@ -32,4 +41,10 @@ EOF
   tags = {
     Name = "project_ec2_openvpn_${var.env}"
   }
+}
+
+# EIP와 OpenVPN 인스턴스 연결
+resource "aws_eip_association" "openvpn_eip_assoc" {
+  instance_id   = aws_instance.ec2_openvpn.id
+  allocation_id = aws_eip.openvpn_eip.id
 }

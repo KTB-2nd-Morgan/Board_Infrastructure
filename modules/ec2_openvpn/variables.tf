@@ -31,7 +31,7 @@ variable "instance_subnet_id_openvpn" {
 
 variable "associate_public_ip_address" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "key_name" {
