@@ -119,20 +119,3 @@ resource "aws_lb_listener" "http_listener" {
     }
   }
 }
-
-resource "aws_lb_listener_rule" "http_listener_rule" {
-  listener_arn = aws_lb_listener.http_listener.arn
-  priority     = 100
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target-group.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["*"]
-    }
-  }
-}
-
