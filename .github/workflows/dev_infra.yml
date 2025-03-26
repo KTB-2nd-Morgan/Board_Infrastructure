@@ -105,6 +105,10 @@ jobs:
           -var="db_password=${{secrets.DB_PASSWORD}}" \
           -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}" \
           -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}" \
+          -var="rds_db_url=${{ secrets.DB_URL }}" \
+          -var="rds_db_username=${{ secrets.DB_USERNAME }}" \
+          -var="rds_db_name=${{ secrets.DB_NAME }}" \
+          -var="rds_db_password=${{ secrets.DB_PASSWORD }}" \
           -detailed-exitcode || exit_code=$? && echo "::set-output name=exitcode::$exit_code"
 
       - name: Terraform Apply (Dev)
@@ -114,7 +118,11 @@ jobs:
           terraform apply -auto-approve \
           -var="db_password=${{ secrets.DB_PASSWORD }}" \
           -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}" \
-          -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}"
+          -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}" \
+          -var="rds_db_url=${{ secrets.DB_URL }}" \
+          -var="rds_db_username=${{ secrets.DB_USERNAME }}" \
+          -var="rds_db_name=${{ secrets.DB_NAME }}" \
+          -var="rds_db_password=${{ secrets.DB_PASSWORD }}" \
 
   destroy_infra:
     name: Destroy Infrastructure
@@ -149,7 +157,11 @@ jobs:
           terraform destroy -auto-approve \
           -var="db_password=${{secrets.DB_PASSWORD}}" \
           -var="openvpn_password=${{ secrets.OPENVPN_PASSWORD }}" \
-          -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}"
+          -var="codedeploy_service_role_arn=${{ secrets.CODE_DEPLOY_SERVICE_ROLE_ARN }}" \
+          -var="rds_db_url=${{ secrets.DB_URL }}" \
+          -var="rds_db_username=${{ secrets.DB_USERNAME }}" \
+          -var="rds_db_name=${{ secrets.DB_NAME }}" \
+          -var="rds_db_password=${{ secrets.DB_PASSWORD }}" \
 
       - name: Empty S3 Bucket
         if: ${{ github.event.inputs.target == 'BACKEND' }}

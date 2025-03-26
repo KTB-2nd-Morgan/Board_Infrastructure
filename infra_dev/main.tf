@@ -172,3 +172,12 @@ module "cloudfront-frontend" {
   frontend_bucket_id   = module.s3-frontend.s3_bucket_id
   frontend_bucket_arn  = module.s3-frontend.s3_bucket_arn
 }
+
+# SSM - Parameter Store
+module "ssm-parameter" {
+  source          = "../modules/ssm"
+  rds_db_url      = var.rds_db_url
+  rds_db_name     = var.rds_db_name
+  rds_db_password = var.rds_db_password
+  rds_db_username = var.rds_db_username
+}
