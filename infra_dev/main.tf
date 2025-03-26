@@ -156,3 +156,19 @@ module "codedeploy" {
 
   depends_on = [module.ecr, module.alb]
 }
+
+
+# S3
+module "s3-frontend" {
+  source = "../modules/s3"
+  env    = var.env
+}
+
+# CloudFront
+module "cloudfront-frontend" {
+  source                    = "../modules/cloudfront"
+  env                       = var.env
+  origin_bucket_domain_name = module.s3-frontend.s3_bucket_name
+  frontend_bucket_id        = module.s3-frontend.s3_bucket_id
+  frontend_bucket_arn       = module.s3-frontend.s3_bucket_arn
+}
