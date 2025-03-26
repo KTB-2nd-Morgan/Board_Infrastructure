@@ -50,6 +50,11 @@ resource "aws_lb_target_group" "target-group" {
   tags = {
     Name = "alb-tg-morgan-${var.env}"
   }
+
+  depends_on = [
+    aws_lb_listener_rule.http_listener_rule,
+    aws_lb_listener.http_listener
+  ]
 }
 
 resource "aws_lb_target_group_attachment" "target-group-attachment" {
