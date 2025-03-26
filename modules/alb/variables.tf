@@ -18,7 +18,7 @@ variable "sg_allow_comm_list" {
 
 variable "port" {
   type    = number
-  default = 80
+  default = 8080
 }
 
 variable "target_type" {

@@ -116,7 +116,7 @@ variable "rds_instance_class" {
 # ALB
 variable "port" {
   type    = number
-  default = 80
+  default = 8080
 }
 
 # variable "aws_s3_lb_logs_name" {
