@@ -150,3 +150,20 @@ variable "codedeploy_ec2_role" {
   type    = string
   default = "CodeDeploy-EC2-Role"
 }
+
+# SSM
+variable "rds_db_url" {
+  type = string
+}
+
+variable "rds_db_name" {
+  type = string
+}
+
+variable "rds_db_username" {
+  type = string
+}
+
+variable "rds_db_password" {
+  type = string
+}
