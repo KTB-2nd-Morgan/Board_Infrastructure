@@ -166,9 +166,9 @@ module "s3-frontend" {
 
 # CloudFront
 module "cloudfront-frontend" {
-  source                    = "../modules/cloudfront"
-  env                       = var.env
-  origin_bucket_domain_name = module.s3-frontend.s3_bucket_name
-  frontend_bucket_id        = module.s3-frontend.s3_bucket_id
-  frontend_bucket_arn       = module.s3-frontend.s3_bucket_arn
+  source               = "../modules/cloudfront"
+  env                  = var.env
+  frontend_bucket_name = module.s3-frontend.s3_bucket_name
+  frontend_bucket_id   = module.s3-frontend.s3_bucket_id
+  frontend_bucket_arn  = module.s3-frontend.s3_bucket_arn
 }
