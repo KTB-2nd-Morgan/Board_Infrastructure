@@ -20,16 +20,10 @@ resource "aws_s3_bucket_public_access_block" "frontend_public_access" {
   restrict_public_buckets = false
 }
 
-# resource "aws_s3_bucket_policy" "frontend_policy" {
-#   bucket = aws_s3_bucket.frontend.id
+resource "aws_s3_bucket_versioning" "frontend_versioning" {
+  bucket = aws_s3_bucket.frontend.id
 
-#   policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [{
-#       Effect    = "Allow"
-#       Principal = "*"
-#       Action    = ["s3:GetObject"]
-#       Resource  = "${aws_s3_bucket.frontend.arn}/*"
-#     }]
-#   })
-# }
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
