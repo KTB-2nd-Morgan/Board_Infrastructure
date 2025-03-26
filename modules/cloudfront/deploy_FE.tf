@@ -77,19 +77,15 @@ resource "aws_s3_bucket_policy" "frontend_policy" {
     Version = "2012-10-17",
     Statement : [
       {
-        Sid : "AllowCloudFrontServicePrincipalReadOnly",
+        Sid : "AllowCloudFrontOAI",
         Effect : "Allow",
         Principal : {
-          Service : "cloudfront.amazonaws.com"
+          AWS : aws_cloudfront_origin_access_identity.oai.iam_arn
         },
         Action : "s3:GetObject",
-        Resource : "${var.frontend_bucket_arn}/*",
-        Condition : {
-          StringEquals : {
-            "AWS:SourceArn" : "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${aws_cloudfront_distribution.frontend_distribution.id}"
-          }
-        }
+        Resource : "${var.frontend_bucket_arn}/*"
       }
     ]
   })
 }
+
