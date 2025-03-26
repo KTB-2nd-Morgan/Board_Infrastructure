@@ -6,7 +6,6 @@ locals {
 
 #EIP 생성
 resource "aws_eip" "openvpn_eip" {
-  domain = vpc
   tags = {
     Name = "project_openvpn_eip_${var.env}"
   }
