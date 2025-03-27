@@ -32,5 +32,41 @@ cd /home/ec2-user
 wget https://aws-codedeploy-ap-northeast-2.s3.amazonaws.com/latest/install
 chmod +x ./install
 sudo ./install auto
+
+yum install -y amazon-cloudwatch-agent
+
+
+INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+cat <<EOC > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+{
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/messages",
+            "log_group_name": "/morgan/backend",
+            "log_stream_name": "$${INSTANCE_ID}-messages",
+            "timestamp_format": "%b %d %H:%M:%S"
+          },
+          {
+            "file_path": "/var/log/cloud-init.log",
+            "log_group_name": "/morgan/backend",
+            "log_stream_name": "$${INSTANCE_ID}-cloudinit"
+          }
+        ]
+      }
+    },
+    "log_stream_name": "default-log-stream",
+    "force_flush_interval": 15
+  }
+}
+EOC
+
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config \
+  -m ec2 \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json \
+  -s
 EOF
 }
