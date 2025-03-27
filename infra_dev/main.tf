@@ -181,3 +181,8 @@ module "ssm-parameter" {
   rds_db_password = var.rds_db_password
   rds_db_username = var.rds_db_username
 }
+
+# Logs
+module "logs" {
+  source = "../modules/logs"
+}
