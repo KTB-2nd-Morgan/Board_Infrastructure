@@ -25,7 +25,15 @@ resource "aws_kinesis_firehose_delivery_stream" "log_delivery" {
     buffering_size     = 5  # MB 단위 (1~128 MB)
     buffering_interval = 60 # 초 단위 (60~900초)
     compression_format = "GZIP"
+
+    cloudwatch_logging_options {
+      enabled         = true
+      log_group_name  = "/aws/kinesisfirehose/morgan-log-delivery"
+      log_stream_name = "delivery-errors"
+    }
   }
+
+
 
 
   depends_on = [aws_iam_role.firehose_role]
@@ -77,7 +85,7 @@ resource "aws_iam_role_policy_attachment" "attach_firehose_policy" {
 }
 
 
-# 
+# Subscription Filter
 resource "aws_cloudwatch_log_subscription_filter" "backend_to_firehose" {
   name            = "backend-log-subscription"
   log_group_name  = var.backend_log_group_name
