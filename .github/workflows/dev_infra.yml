@@ -109,6 +109,7 @@ jobs:
           -var="rds_db_username=${{ secrets.DB_USERNAME }}" \
           -var="rds_db_name=${{ secrets.DB_NAME }}" \
           -var="rds_db_password=${{ secrets.DB_PASSWORD }}" \
+          -var="slack_webhook_url=${{ secrets.SLACK_WEBHOOK_URL }}" \
           -detailed-exitcode || exit_code=$? && echo "::set-output name=exitcode::$exit_code"
 
       - name: Terraform Apply (Dev)
@@ -123,6 +124,7 @@ jobs:
           -var="rds_db_username=${{ secrets.DB_USERNAME }}" \
           -var="rds_db_name=${{ secrets.DB_NAME }}" \
           -var="rds_db_password=${{ secrets.DB_PASSWORD }}" \
+          -var="slack_webhook_url=${{ secrets.SLACK_WEBHOOK_URL }}"
 
   destroy_infra:
     name: Destroy Infrastructure
@@ -162,6 +164,7 @@ jobs:
           -var="rds_db_username=${{ secrets.DB_USERNAME }}" \
           -var="rds_db_name=${{ secrets.DB_NAME }}" \
           -var="rds_db_password=${{ secrets.DB_PASSWORD }}" \
+          -var="slack_webhook_url=${{ secrets.SLACK_WEBHOOK_URL }}" \
 
       - name: Empty S3 Bucket
         if: ${{ github.event.inputs.target == 'BACKEND' }}

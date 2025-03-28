@@ -167,3 +167,8 @@ variable "rds_db_username" {
 variable "rds_db_password" {
   type = string
 }
+
+# SNS
+variable "slack_webhook_url" {
+  type = string
+}
