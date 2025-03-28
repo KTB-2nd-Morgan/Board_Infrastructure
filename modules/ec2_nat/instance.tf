@@ -36,7 +36,7 @@ sudo ./install auto
 yum install -y amazon-cloudwatch-agent
 
 
-INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
 cat <<EOC > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
 {
   "logs": {
@@ -46,13 +46,13 @@ cat <<EOC > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
           {
             "file_path": "/var/log/messages",
             "log_group_name": "/morgan/backend",
-            "log_stream_name": "$${INSTANCE_ID}-messages",
+            "log_stream_name": "backend-messages-$${TIMESTAMP}",
             "timestamp_format": "%b %d %H:%M:%S"
           },
           {
             "file_path": "/var/log/cloud-init.log",
             "log_group_name": "/morgan/backend",
-            "log_stream_name": "$${INSTANCE_ID}-cloudinit"
+            "log_stream_name": "backend-cloudinit-$${TIMESTAMP}"
           }
         ]
       }
