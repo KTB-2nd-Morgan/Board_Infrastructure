@@ -27,6 +27,7 @@ resource "aws_kinesis_firehose_delivery_stream" "log_delivery" {
     compression_format = "GZIP"
   }
 
+
   depends_on = [aws_iam_role.firehose_role]
 }
 
