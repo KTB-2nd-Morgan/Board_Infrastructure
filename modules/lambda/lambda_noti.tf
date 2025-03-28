@@ -33,11 +33,11 @@ resource "aws_iam_role" "cloudwatch_logs_to_lambda" {
   })
 }
 
-resource "aws_iam_policy_attachment" "attach_logs_to_lambda_policy" {
-  name       = "logs-to-lambda"
-  roles      = [aws_iam_role.cloudwatch_logs_to_lambda.name]
+resource "aws_iam_role_policy_attachment" "attach_logs_to_lambda_policy" {
+  role       = aws_iam_role.cloudwatch_logs_to_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
 
 # Lambda Function for Slack Notifications
 resource "aws_lambda_function" "slack_alert" {
@@ -56,6 +56,13 @@ resource "aws_lambda_function" "slack_alert" {
   source_code_hash = filebase64sha256("${path.module}/slack-alert.zip")
 }
 
+resource "aws_lambda_permission" "allow_cloudwatch_logs" {
+  statement_id  = "AllowExecutionFromCloudWatchLogs"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.slack_alert.function_name
+  principal     = "logs.amazonaws.com"
+  source_arn    = "arn:aws:logs:${var.aws_region}:${var.aws_account_id}:log-group:/morgan/backend/spring-app:*"
+}
 
 # ✅ CloudWatch Logs → Lambda 연결을 위한 Subscription Filter
 resource "aws_cloudwatch_log_subscription_filter" "error_direct_to_lambda" {
@@ -63,9 +70,11 @@ resource "aws_cloudwatch_log_subscription_filter" "error_direct_to_lambda" {
   log_group_name  = "/morgan/backend/spring-app"
   filter_pattern  = "?ERROR ?Exception"
   destination_arn = aws_lambda_function.slack_alert.arn
+  role_arn        = aws_iam_role.cloudwatch_logs_to_lambda.arn # ✅ 추가 필요
 
   depends_on = [
     aws_lambda_function.slack_alert,
-    aws_iam_policy_attachment.attach_logs_to_lambda_policy
+    aws_lambda_permission.allow_cloudwatch_logs,
+    aws_iam_role_policy_attachment.attach_logs_to_lambda_policy
   ]
 }
