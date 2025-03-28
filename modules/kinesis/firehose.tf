@@ -44,6 +44,26 @@ resource "aws_iam_policy" "firehose_policy" {
           "s3:GetBucketLocation"
         ],
         Resource = "${var.s3_bucket_arn}/*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:PutLogEvents",
+          "logs:GetLogEvents",
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams",
+          "logs:PutSubscriptionFilter",
+          "logs:DeleteSubscriptionFilter"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "firehose:PutRecord",
+          "firehose:PutRecordBatch"
+        ],
+        Resource = aws_kinesis_firehose_delivery_stream.log_delivery.arn
       }
     ]
   })
@@ -54,6 +74,7 @@ resource "aws_iam_role_policy_attachment" "attach_firehose_policy" {
   role       = aws_iam_role.firehose_role.name
   policy_arn = aws_iam_policy.firehose_policy.arn
 }
+
 
 # 
 resource "aws_cloudwatch_log_subscription_filter" "backend_to_firehose" {
