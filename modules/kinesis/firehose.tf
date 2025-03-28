@@ -138,3 +138,17 @@ resource "aws_cloudwatch_log_subscription_filter" "backend_to_firehose" {
     aws_iam_role_policy_attachment.attach_logs_to_firehose_policy
   ]
 }
+
+# Subscription Filter for Spring App Logs
+resource "aws_cloudwatch_log_subscription_filter" "spring_app_logs" {
+  name            = "spring-app-subscription"
+  log_group_name  = "/morgan/backend/spring-app"
+  filter_pattern  = ""
+  destination_arn = aws_kinesis_firehose_delivery_stream.log_delivery.arn
+  role_arn        = aws_iam_role.cloudwatch_logs_to_firehose.arn
+
+  depends_on = [
+    aws_kinesis_firehose_delivery_stream.log_delivery,
+    aws_iam_role_policy_attachment.attach_logs_to_firehose_policy
+  ]
+}
