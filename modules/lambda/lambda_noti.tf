@@ -63,7 +63,6 @@ resource "aws_cloudwatch_log_subscription_filter" "error_direct_to_lambda" {
   log_group_name  = "/morgan/backend/spring-app"
   filter_pattern  = "?ERROR ?Exception"
   destination_arn = aws_lambda_function.slack_alert.arn
-  role_arn        = aws_iam_role.cloudwatch_logs_to_lambda.arn # 🔁 여기 핵심 변경!
 
   depends_on = [
     aws_lambda_function.slack_alert,
