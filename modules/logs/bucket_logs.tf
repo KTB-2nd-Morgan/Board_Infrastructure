@@ -75,3 +75,29 @@ resource "aws_iam_role_policy_attachment" "attach_cloudwatch_s3_policy" {
   role       = aws_iam_role.cloudwatch_to_s3.name
   policy_arn = aws_iam_policy.cloudwatch_s3_policy.arn
 }
+
+resource "aws_s3_bucket_policy" "allow_firehose_write" {
+  bucket = aws_s3_bucket.log_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid    = "AllowFirehoseWriteAccess",
+        Effect = "Allow",
+        Principal = {
+          Service = "firehose.amazonaws.com"
+        },
+        Action = [
+          "s3:PutObject"
+        ],
+        Resource = "${aws_s3_bucket.log_bucket.arn}/*",
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = var.aws_account_id
+          }
+        }
+      }
+    ]
+  })
+}
