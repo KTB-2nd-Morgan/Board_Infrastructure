@@ -78,6 +78,16 @@ resource "aws_iam_policy" "firehose_policy" {
           "firehose:PutRecordBatch"
         ],
         Resource = aws_kinesis_firehose_delivery_stream.log_delivery.arn
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:PutLogEvents",
+          "logs:CreateLogStream",
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams"
+        ],
+        Resource = "arn:aws:logs:${var.aws_region}:${var.aws_account_id}:log-group:/aws/kinesisfirehose/*"
       }
     ]
   })
