@@ -17,6 +17,28 @@ resource "aws_iam_policy_attachment" "lambda_logs_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+# ✅ CloudWatch Logs → Lambda 트리거용 IAM Role
+resource "aws_iam_role" "cloudwatch_logs_to_lambda" {
+  name = "cloudwatch-logs-to-lambda"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "logs.${var.aws_region}.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_policy_attachment" "attach_logs_to_lambda_policy" {
+  name       = "logs-to-lambda"
+  roles      = [aws_iam_role.cloudwatch_logs_to_lambda.name]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 # Lambda Function for Slack Notifications
 resource "aws_lambda_function" "slack_alert" {
   filename      = "${path.module}/slack-alert.zip"
@@ -34,18 +56,17 @@ resource "aws_lambda_function" "slack_alert" {
   source_code_hash = filebase64sha256("${path.module}/slack-alert.zip")
 }
 
-# Lambda Permission for SNS
-resource "aws_lambda_permission" "allow_sns" {
-  statement_id  = "AllowExecutionFromSNS"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.slack_alert.function_name
-  principal     = "sns.amazonaws.com"
-  source_arn    = var.alarm_topic_arn
-}
 
-resource "aws_sns_topic_subscription" "lambda_sub" {
-  topic_arn = var.alarm_topic_arn
-  protocol  = "lambda"
-  endpoint  = aws_lambda_function.slack_alert.arn
-}
+# ✅ CloudWatch Logs → Lambda 연결을 위한 Subscription Filter
+resource "aws_cloudwatch_log_subscription_filter" "error_direct_to_lambda" {
+  name            = "ErrorToSlack"
+  log_group_name  = "/morgan/backend/spring-app"
+  filter_pattern  = "?ERROR ?Exception"
+  destination_arn = aws_lambda_function.slack_alert.arn
+  role_arn        = aws_iam_role.cloudwatch_logs_to_lambda.arn # 🔁 여기 핵심 변경!
 
+  depends_on = [
+    aws_lambda_function.slack_alert,
+    aws_iam_policy_attachment.attach_logs_to_lambda_policy
+  ]
+}

@@ -194,15 +194,13 @@ module "kinesis" {
   backend_log_group_name = module.logs.backend_log_group_name
 }
 
-# AWS SNS
-module "notification" {
-  source = "../modules/notification"
-}
+# # AWS SNS
+# module "notification" {
+#   source = "../modules/notification"
+# }
 
 # AWS Lambda
 module "notification_lambda" {
   source            = "../modules/lambda"
-  alarm_topic_arn   = module.notification.alarm_topic_arn
   slack_webhook_url = var.slack_webhook_url
-  depends_on        = [module.notification]
 }
