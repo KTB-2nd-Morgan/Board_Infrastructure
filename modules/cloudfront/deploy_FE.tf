@@ -17,6 +17,50 @@ provider "aws" {
   alias  = "virginia"
   region = "us-east-1"
 }
+
+resource "aws_s3_bucket" "cloudfront_logs" {
+  bucket = "morgan-cloudfront-logs"
+
+  tags = {
+    Name        = "cloudfront-logs"
+    Environment = "dev"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloudfront_logs_encryption" {
+  bucket = aws_s3_bucket.cloudfront_logs.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "allow_cloudfront_logs" {
+  bucket = aws_s3_bucket.cloudfront_logs.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid    = "AWSCloudFrontLogs",
+        Effect = "Allow",
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        },
+        Action   = "s3:PutObject",
+        Resource = "${aws_s3_bucket.cloudfront_logs.arn}/logs/*",
+        Condition = {
+          StringEquals = {
+            "AWS:SourceAccount" = var.aws_account_id
+          }
+        }
+      }
+    ]
+  })
+}
+
 resource "aws_cloudfront_distribution" "frontend_distribution" {
   enabled             = true
   is_ipv6_enabled     = false
@@ -64,6 +108,13 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.cloudfront_logs.bucket_domain_name
+    prefix          = "logs-FE/" # S3 폴더 prefix
+  }
+
 
   tags = {
     Name = "frontend-cloudfront-${var.env}"
