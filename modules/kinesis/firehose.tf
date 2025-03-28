@@ -15,6 +15,11 @@ resource "aws_iam_role" "firehose_role" {
 }
 
 # Firehose Delivery Stream
+
+resource "aws_cloudwatch_log_group" "firehose_error_logs" {
+  name              = "/aws/kinesisfirehose/morgan-log-delivery"
+  retention_in_days = 7
+}
 resource "aws_kinesis_firehose_delivery_stream" "log_delivery" {
   name        = "morgan-log-delivery"
   destination = "extended_s3"
@@ -28,7 +33,7 @@ resource "aws_kinesis_firehose_delivery_stream" "log_delivery" {
 
     cloudwatch_logging_options {
       enabled         = true
-      log_group_name  = "/aws/kinesisfirehose/morgan-log-delivery"
+      log_group_name  = aws_cloudwatch_log_group.firehose_error_logs.name
       log_stream_name = "delivery-errors"
     }
   }
@@ -36,7 +41,7 @@ resource "aws_kinesis_firehose_delivery_stream" "log_delivery" {
 
 
 
-  depends_on = [aws_iam_role.firehose_role]
+  depends_on = [aws_cloudwatch_log_group.firehose_error_logs, aws_iam_role.firehose_role]
 }
 
 # Firehose IAM Policy
