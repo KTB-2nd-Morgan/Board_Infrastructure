@@ -61,6 +61,19 @@ resource "aws_s3_bucket_policy" "allow_cloudfront_logs" {
   })
 }
 
+resource "aws_s3_bucket_ownership_controls" "cloudfront_logs_ownership" {
+  bucket = aws_s3_bucket.cloudfront_logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "cloudfront_logs_acl" {
+  depends_on = [aws_s3_bucket_ownership_controls.cloudfront_logs_ownership]
+  bucket     = aws_s3_bucket.cloudfront_logs.id
+  acl        = "log-delivery-write"
+}
+
 resource "aws_cloudfront_distribution" "frontend_distribution" {
   enabled             = true
   is_ipv6_enabled     = false
