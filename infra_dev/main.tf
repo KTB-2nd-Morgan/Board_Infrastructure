@@ -186,3 +186,10 @@ module "ssm-parameter" {
 module "logs" {
   source = "../modules/logs"
 }
+
+# Kinesis
+module "kinesis" {
+  source                 = "../modules/kinesis"
+  s3_bucket_arn          = module.logs.log_bucket_arn
+  backend_log_group_name = module.logs.backend_log_group_name
+}
