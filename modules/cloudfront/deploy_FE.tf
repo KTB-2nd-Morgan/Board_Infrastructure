@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "cloudfront_logs" {
-  bucket = "morgan-cloudfront-logs"
+  bucket = "morgan-frontend-logs"
 
   tags = {
     Name        = "cloudfront-logs"
