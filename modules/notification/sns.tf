@@ -5,7 +5,7 @@ resource "aws_sns_topic" "alarm_topic" {
 # CloudWatch Log Subscription Filter(Error)
 resource "aws_cloudwatch_log_metric_filter" "error_filter" {
   name           = "ErrorFilter"
-  log_group_name = "/morgan/backend"
+  log_group_name = "/morgan/backend/spring-app"
   pattern        = "?ERROR ?Exception"
 
   metric_transformation {
