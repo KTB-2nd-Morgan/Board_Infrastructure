@@ -83,5 +83,5 @@ resource "aws_cloudwatch_log_subscription_filter" "backend_to_firehose" {
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.log_delivery.arn
   role_arn        = aws_iam_role.firehose_role.arn
-  depends_on      = [aws_kinesis_firehose_delivery_stream.log_delivery]
+  depends_on      = [aws_kinesis_firehose_delivery_stream.log_delivery, aws_iam_role_policy_attachment.attach_firehose_policy]
 }
